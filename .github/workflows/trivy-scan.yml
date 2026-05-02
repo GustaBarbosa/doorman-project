@@ -1,0 +1,27 @@
+name: DevSecOps Pipeline - Doorman
+
+on:
+  push:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-scan:
+    name: Build and Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: clone repo doorman
+        uses: actions/checkout@v4
+
+      - name: Build the Docker image
+        run: docker build -t doorman-api:latest .
+
+      - name: scan with trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'doorman-api:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
