@@ -1,10 +1,12 @@
-FROM python:3.6-slim-buster
+FROM python:3.11-slim
 
 WORKDIR /app
 
 COPY app.py requirements.txt /app/
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip wheel jaraco.context setuptools
+
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
